@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using TMPro;
 
 public class SaveData : MonoBehaviour
 {
@@ -19,13 +20,16 @@ public class SaveData : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        
         LoadPlayerData();
     }
 
+    
     [System.Serializable]
     class SaveDataAsJson
     {
@@ -33,12 +37,17 @@ public class SaveData : MonoBehaviour
         public string HighestScore;
     }
 
-    public void SavePlayerData(string s)
+    public void UpdatePlayerName(TMP_InputField f)
+    {
+        PlayerName = f.text;
+    }
+
+    public void SavePlayerData()
     {
         // Get the name
-        GameObject f = GameObject.Find("NameInput");
-        Debug.Log(s);
-        PlayerName = s;
+        //GameObject f = GameObject.Find("NameInput");
+        //Debug.Log(name);
+        //PlayerName = name;
 
 
         SaveDataAsJson data = new SaveDataAsJson();
@@ -48,6 +57,7 @@ public class SaveData : MonoBehaviour
 
         string json = JsonUtility.ToJson(data);
 
+        Debug.Log("Path to save file: " + Application.persistentDataPath + "/savefile.json");
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
